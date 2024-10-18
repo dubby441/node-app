@@ -1,0 +1,10 @@
+.idea
+
+.env
+
+.dist/
+
+docker-db/
+
+
+node_modules/
