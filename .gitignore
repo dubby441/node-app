@@ -2,9 +2,12 @@
 
 .env
 
-.dist/
+dist/
 
 docker-db/
 
 
 node_modules/
+
+
+http://localhost:3000/api/v1/auth/signup

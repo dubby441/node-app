@@ -1,6 +1,5 @@
 import express from 'express';
 
-import { AuthController } from './src/auth/auth.controller';
 import authRoutes from "./src/auth/auth.routes";
 import userRoutes from "./src/user/user.routes"
 import adminRoutes from "./src/user/admin.routes";

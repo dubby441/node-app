@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec ts-node server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
     "migration:generate": "npx typeorm-ts-node-commonjs -d ./src/data-source.ts migration:generate ./src/migrations/default",
     "migration:run": "npx typeorm-ts-node-commonjs -d ./src/data-source.ts migration:run",
     "test": "echo \"Error: no test specified\" && exit 1"
