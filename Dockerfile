@@ -1,6 +1,6 @@
-FROM node:18-bullseye as builder
+FROM node:23-bookworm 
 
-WORKDIR /var/www/
+WORKDIR /www/app
 
 COPY package*.json ./
 
@@ -10,8 +10,9 @@ COPY . .
 
 COPY ./scripts /usr/local/bin/
 
-RUN chmod +x -R /usr/local/bin
+RUN chmod +x  /usr/local/bin/start.sh
 
 EXPOSE 80
 
 ENTRYPOINT ["start.sh", "$NODE_ENV"]
+
