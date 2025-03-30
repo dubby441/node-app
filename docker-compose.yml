@@ -1,46 +1,40 @@
-version: '3'
 
-services:
-  api:
-    build:
-      context: .
-    container_name: api
-    depends_on:
-      - postgres
-    ports:
-      - '${PORT}:${PORT}'
-    env_file:
-      - .env
-    environment:
-      - PORT=${PORT}
-      - DB_USER=root
-      - DB_NAME=sootchy
-      - DB_PORT=5432
-      - DB_PASS=toor
-      - DB_HOST=postgres
-      - JWT_SECRET=c300bea63c334c543b122061ce3efe838d47fbee793f31b8b965537ba02dd47e0bc7540317d55f1f43af48e0a8805d6d61ca09bdb5a15380cf95c1db14605e85
-      - JWT_ISSUER=sootchy.com
-      - JWT_AUDIENCE=sootchy.com
-      - JWT_EXPIRES_IN=1h
-      - JWT_ALGORITHM=HS256
-      - JWT_REFRESH_EXPIRES_IN=7d
-    volumes:
-      - .:/var/www/
+services: 
+  node-app:
+   build: 
+    context: .
+   depends_on:
+    - postgres-db
+   restart: "no"
+   environment:
+    NODE_ENV: "production"
+    DB_HOST: "postgres-db"
+    DB_USER: "dubby"
+    DB_PASS: "dubby1"
+    DB_NAME: "postgres-db"
+    DB_PORT: 5432
+    PORT: 5051
+   ports:
+    - 5004:5051
+   volumes: 
+    - .:/www/app
+    -  /usr/src/app/node_modules 
+   networks:
+    - altsch-network 
 
-  postgres:
-    restart: always
-    image: postgres:12-alpine
-    container_name: api-db
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=toor
-      - POSTGRES_DB=sootchy
-    ports:
-      - 5433:5432
-    volumes:
-      - ./docker-db/scripts/db:/scripts
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+  postgres-db:
+   image: postgres
+   ports:
+    - 5432:5432
+   environment:
+    POSTGRES_PASSWORD: dubby1
+    POSTGRES_USER: dubby
+    POSTGRES_DB: "postgres-db"
+   networks:
+    - altsch-network   
+
+networks:
+  altsch-network:
+   name: altsch-network
+   driver: bridge
+
