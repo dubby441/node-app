@@ -1,8 +1,9 @@
 
 services: 
   node-app:
-   build: 
-    context: .
+  #  build: 
+  #   context: .
+   image: 445567096663.dkr.ecr.us-east-1.amazonaws.com/node-app:lastest
    depends_on:
     - postgres-db
    restart: "no"

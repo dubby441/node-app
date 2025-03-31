@@ -53,7 +53,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ env.AWS_ECR_REGISTRY }}/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}
+          tags: ${{ env.AWS_ECR_REGISTRY }}/${{ env.AWS_ECR_REPOSITORY }}:latest
   deploy_to_staging:
     needs: [build]
     runs-on: ubuntu-latest
@@ -68,18 +68,9 @@ jobs:
           script: |
             set -ex
             export IMAGE_TAG=${{ github.sha }}
-            mkdir -p ~/api  # Ensure the directory exists
             cd ~/api
-
-            
-           if [ ! -d "/home/ubuntu/api/.git" ]; then
-              git clone https://github.com/dubby441/node-app.git /home/ubuntu/api
-           fi
-
-           cd /home/ubuntu/api && git pull origin develop
-
             aws ecr get-login-password --region us-east-1 |docker login --username AWS --password-stdin ${{ env.AWS_ECR_REGISTRY }}
             docker compose pull api
             docker compose down -v --remove-orphans
-            docker compose up -d --force-recreate api
-            docker image prune -af
+            docker compose up -d --force-recreate node-app 
+            docker image prune -af #delete older version of the image
