@@ -2,11 +2,12 @@ name: Deployment to EC2 server
 on:
   push:
     branches:
-      - main
-      - develop 
+      # - main
+      # - "feat/**"
+      - develop
 
 env:
-  AWS_REGION: "eu-west-1"
+  AWS_REGION: "us-east-1"
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
@@ -15,6 +16,16 @@ env:
 concurrency:
   group: ${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
+
+  # Deployment workflow
+  # build docker image of my code
+  # 1. build my code
+  # 2. push my built image to a docker registry
+  #
+  # deploy my code
+  # 3. login into a server
+  # 4. pull the docker image i pushed in step 2
+  # 5. run docker-compose commands
 
 jobs:
   build:
@@ -42,11 +53,11 @@ jobs:
           context: .
           push: true
           tags: ${{ env.AWS_ECR_REGISTRY }}/${{ env.AWS_ECR_REPOSITORY }}:${{ github.sha }}
-  deploy_to_develop:
+  deploy_to_staging:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to EC2 develop
+      - name: Deploy to EC2 44.223.27.157
         uses: appleboy/ssh-action@master
         if: github.ref == 'refs/heads/develop'
         with:
@@ -56,7 +67,7 @@ jobs:
           script: |
             set -ex
             export IMAGE_TAG=${{ github.sha }}
-            cd ~/flota-app
+            cd ~/api
             aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${{ env.AWS_ECR_REGISTRY }}
             docker compose pull api
             docker compose down -v --remove-orphans
