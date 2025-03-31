@@ -70,11 +70,14 @@ jobs:
             export IMAGE_TAG=${{ github.sha }}
             mkdir -p ~/api  # Ensure the directory exists
             cd ~/api
-            # Ensure the repo is cloned
+
+            
            if [ ! -d "/home/ubuntu/api/.git" ]; then
-           git clone https://github.com/dubby441/node-app.git /home/ubuntu/api
+              git clone https://github.com/dubby441/node-app.git /home/ubuntu/api
            fi
+
            cd /home/ubuntu/api && git pull origin develop
+
             aws ecr get-login-password --region us-east-1 |docker login --username AWS --password-stdin ${{ env.AWS_ECR_REGISTRY }}
             docker compose pull api
             docker compose down -v --remove-orphans
