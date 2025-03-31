@@ -71,7 +71,7 @@ jobs:
             mkdir -p ~/api  # Ensure the directory exists
             cd ~/api
             aws ecr get-login-password --region us-east-1 |docker login --username AWS --password-stdin ${{ env.AWS_ECR_REGISTRY }}
-            docker compose pull api
-            docker compose down -v --remove-orphans
-            docker compose up -d --force-recreate api
+            docker-compose pull api
+            docker-compose down -v --remove-orphans
+            docker-compose up -d --force-recreate api
             docker image prune -af
