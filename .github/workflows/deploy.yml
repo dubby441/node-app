@@ -73,4 +73,4 @@ jobs:
             docker compose pull api
             docker compose down -v --remove-orphans
             docker compose up -d --force-recreate node-app 
-            docker image prune -af #delete older version of the image
+            docker image prune -af 
