@@ -26,6 +26,7 @@ concurrency:
   # 3. login into a server
   # 4. pull the docker image i pushed in step 2
   # 5. run docker-compose commands
+  #
 
 jobs:
   build:
