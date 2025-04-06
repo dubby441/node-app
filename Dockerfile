@@ -10,13 +10,11 @@ RUN npm install -g typeorm-ts-node-commonjs
 
 COPY . .
 
-COPY ./scripts/start.sh /usr/local/bin/start.sh
-
-RUN chmod +x  /usr/local/bin/start.sh
+RUN chmod +x  ./scripts/start.sh 
 
 EXPOSE 80
 
-ENTRYPOINT ["/bin/sh", "/usr/local/bin/start.sh"]
+ENTRYPOINT ["./scripts/start.sh", "$NODE_ENV"]
 
 
 
